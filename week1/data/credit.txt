@@ -1,0 +1,1 @@
+All data in this folder is taken from https://github.com/zhongyuchen/genome-assembly
