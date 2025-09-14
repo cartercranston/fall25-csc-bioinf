@@ -1,6 +1,7 @@
 #! /bin/bash
 set -euxo pipefail
 shopt -s extglob
+exec 3>&1 4>&2 # link file descriptors 3 and 4 to original stdout and stderr
 
 readonly line_pattern='^[0-9]+ [0-9]+$'
 
@@ -10,9 +11,11 @@ echo "---------------------------------"
 
 # run python and codon scripts to fill in the table
 for ((i = 1; i <= 1; i++)); do 
-    echo -n "data$i   python        "
-    python_time="$(time python_output=`python3 ./code/main.py ./data/data$i` )"
-    echo -n "$python_time    "
+    str="data$i   python        "
+    # run the python script while storing the runtime in a text file
+    python_output=$( /usr/bin/time -f "%E" -o time_output.txt python3 ./code/main.py ./data/data$i 2>&4 )
+    python_time=$(<time_output.txt)
+    str="$str$python_time    "
     
     # first loop calculates total genome length
     sum=0
@@ -33,9 +36,10 @@ for ((i = 1; i <= 1; i++)); do
 	    read -r first second <<< "$line" # separate the two numbers
     	    sum2=$((sum2 + second))
 	    if [[ $sum2 > $target ]]; then
-		echo $second
+		str="$str$second"
 		break
 	    fi    
 	fi
     done <<< $python_output
+    echo $str
 done
