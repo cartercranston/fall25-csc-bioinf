@@ -4,10 +4,15 @@ shopt -s extglob
 
 readonly line_pattern='^[0-9]+ [0-9]+$'
 
+# output starts with table header
+echo "Dataset Language      Runtime N50"
+echo "---------------------------------"
+
+# run python and codon scripts to fill in the table
 for ((i = 1; i <= 1; i++)); do 
     echo -n "data$i   python        "
-    time python_output=`python3 ./code/main.py ./data/data$i`
-    echo -n "    "
+    python_time="$(time python_output=`python3 ./code/main.py ./data/data$i` )"
+    echo -n "$python_time    "
     
     # first loop calculates total genome length
     sum=0
