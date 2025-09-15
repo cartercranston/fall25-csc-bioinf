@@ -21,4 +21,4 @@ if __name__ == "__main__":
             print(i, len(c))
             f.write('>contig_%d\n' % i)
             f.write(c + '\n')
-    dbg.print_debug_info()
+    #dbg.print_debug_info()

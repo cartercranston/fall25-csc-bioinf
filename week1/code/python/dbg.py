@@ -101,7 +101,7 @@ class DBG:
             children = self._get_sorted_children(idx)
             max_depth, max_child = 0, None
             for child in children:
-                print("Type of children:",type(child))
+                #print("Type of children:",type(child))
                 depth = self._get_depth(child)
                 if depth > max_depth:
                     max_depth, max_child = depth, child

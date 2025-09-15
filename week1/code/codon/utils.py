@@ -2,7 +2,7 @@ from python import os
 
 def read_fasta(path: str, name: str):
     data: List[str] = []
-    with open(os.path.join(path, name), 'r') as f:
+    with open(str(os.path.join(path, name)), 'r') as f:
         for line in f.readlines():
             line = line.strip()
             if line[0] != '>':

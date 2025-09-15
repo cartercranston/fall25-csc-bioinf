@@ -1,5 +1,4 @@
 import copy
-from python import matplotlib
 
 
 def reverse_complement(key: str):
@@ -18,7 +17,7 @@ class Node:
         self.kmer: str = kmer
         self.visited: bool = False
         self.depth: int = 0
-        self.max_depth_child: int = None
+        self.max_depth_child: Optional[int] = None
 
     def add_child(self, kmer: int):
         self._children.add(kmer)
@@ -44,7 +43,7 @@ class Node:
 class DBG:
     def __init__(self, k: int, data_list: List[List[str]]):
         self.k: int = k
-        self.nodes: Dict[int, Node] = {}
+        self.nodes: Dict[int, Node[Set[int], int, int, str, Optional[int], bool]] = {}
         # private
         self.kmer2idx: Dict[str, int] = {}
         self.kmer_count: int = 0
@@ -59,7 +58,7 @@ class DBG:
 
     def _build(self, data_list: List[List[str]]):
         for data in data_list:
-            for original: str in data:
+            for original in data:
                 rc: str = reverse_complement(original)
                 for i in range(len(original) - self.k - 1):
                     self._add_arc(original[i: i + self.k], original[i + 1: i + 1 + self.k])
@@ -67,7 +66,8 @@ class DBG:
 
     def show_count_distribution(self):
         count: List[int] = [0] * 30
-        for idx: int in self.nodes:
+        for idx in self.nodes:
+            # idx is an int
             count[self.nodes[idx].get_count()] += 1
         print(count[0:10])
         # plt.plot(count)
@@ -99,7 +99,8 @@ class DBG:
         if not self.nodes[idx].visited:
             self.nodes[idx].visited = True
             children: List[int] = self._get_sorted_children(idx)
-            max_depth, max_child: int = 0, None
+            # max_depth and max_child are ints
+            max_depth, max_child = 0, None
             for child in children:
                 depth = self._get_depth(child)
                 if depth > max_depth:
