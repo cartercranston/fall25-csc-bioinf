@@ -1357,3 +1357,85 @@ Copy
 full_path = path + "/" + name  # Simple concatenation (adjust for OS if needed)
 with open(full_path, 'r') as f:
 This resolves the type mismatch by ensuring all path operations use Codon-native strings.
+
+Prompt:
+Can you help me debug my GitHub CI?
+My repository (named repo) contains a directory called week1 which contains a file called evaluate.sh. As part of the shell script's execution, it uses the relative path "code/python/main.py" to run repo/week1/code/python/main.py. After making this file, I added the following two lines to the end of my .github/workflows/actions.yml file:
+- name: Week 1
+run: bash week1/evaluate.sh
+When I push the repo, GitHub runs the shell script, but stops partway through with the error message python3: can't open file '/home/runner/work/repo/repo/code/python/main.py': [Errno 2] No such file or directory.
+Why does repo show up twice in the path and why does week1 not show up at all?
+
+ZAI Response:
+
+
+# Debugging Your GitHub CI Path Issue
+
+The issue you're experiencing is related to how GitHub Actions handles working directories and relative paths. Let me explain what's happening and how to fix it.
+
+## Why "repo" appears twice in the path
+
+In GitHub Actions, when your repository is checked out, it's placed in a directory structure like:
+```
+/home/runner/work/<repository-name>/<repository-name>
+```
+In your case, this becomes:
+```
+/home/runner/work/repo/repo
+```
+This is standard GitHub Actions behavior - the repository name appears twice in the path.
+
+## Why "week1" doesn't appear in the path
+
+The problem is with your working directory. When you run:
+```yaml
+- name: Week 1
+  run: bash week1/evaluate.sh
+```
+The script is executed from the root of your repository (`/home/runner/work/repo/repo`), not from inside the `week1` directory.
+
+When your script tries to access `code/python/main.py` using a relative path, it's looking for:
+```
+/home/runner/work/repo/repo/code/python/main.py
+```
+But the actual file is at:
+```
+/home/runner/work/repo/repo/week1/code/python/main.py
+```
+
+## Solutions
+
+You have several options to fix this:
+
+### Option 1: Change the working directory in your workflow
+
+```yaml
+- name: Week 1
+  working-directory: week1
+  run: bash evaluate.sh
+```
+
+### Option 2: Change directory before running the script
+
+```yaml
+- name: Week 1
+  run: |
+    cd week1
+    bash evaluate.sh
+```
+
+### Option 3: Modify your script to use the correct path
+
+In `evaluate.sh`, change the path to include the `week1` directory:
+```bash
+python3 week1/code/python/main.py
+```
+
+### Option 4: Use an absolute path in your script
+
+In `evaluate.sh`, use the `$GITHUB_WORKSPACE` environment variable:
+```bash
+python3 $GITHUB_WORKSPACE/week1/code/python/main.py
+```
+
+I recommend Option 1 as it's the cleanest solution that doesn't require modifying your script.

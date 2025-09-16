@@ -14,7 +14,7 @@ readonly data_path="data"
 # First parameter $1 is index from 1 to 4
 # Second parameter $2 is language name "python3" or "codon"
 print_single_row () {
-    str="data$1   $2        "
+    str="data$1"'\t\t'"$2"'\t\t'
     # run the python or codon script while storing the runtime in a text file
     if [[ $2 == "python" ]]; then
         code_output=$( /usr/bin/time -f "%E" -o time_output.txt python3 $python_path/main.py $data_path/data$1 2>&4 )
@@ -22,7 +22,7 @@ print_single_row () {
 	code_output=$( /usr/bin/time -f "%E" -o time_output.txt codon run -release $codon_path/main.py $data_path/data$1 2>&4 )
     fi
     running_time=$(<time_output.txt)
-    str="$str$running_time    "
+    str="$str$running_time"'\t\t'
     
     # first loop calculates total genome length
     sum=0
@@ -48,15 +48,15 @@ print_single_row () {
 	    fi    
 	fi
     done <<< $code_output
-    echo $str
+    echo -e $str
 }
 
 # Main code
 # -----------------------------------
 
 # output starts with table header
-echo "Dataset Language      Runtime N50"
-echo "---------------------------------"
+echo -e 'Dataset\t\tLanguage\tRuntime\t\tN50'
+echo "-----------------------------------------------------"
 
 # run python and codon scripts to fill in the table
 for ((i = 1; i <= 4; i++)); do 
