@@ -30,4 +30,6 @@ jobs:
         run: pip install matplotlib
       - name: Week 1
         working-directory: week1
-        run: bash evaluate.sh
+        run: |
+          export LD_LIBRARY_PATH=/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+          bash evaluate.sh
