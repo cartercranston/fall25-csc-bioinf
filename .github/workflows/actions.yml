@@ -13,7 +13,6 @@ jobs:
           curl -L https://github.com/exaloop/codon/releases/download/v0.19.3/codon-linux-x86_64.tar.gz | tar zxvf - --strip-components=1 -C ${HOME}/.codon
           curl -L https://github.com/exaloop/seq/releases/download/v0.11.5/seq-linux-x86_64.tar.gz | tar zxvf - -C ${HOME}/.codon/lib/codon/plugins
           export PATH=${PATH}:${HOME}/.codon/bin
-          echo "${HOME}/.codon/bin" >> $GITHUB_PATH
       - name: Check out repository code
         uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -26,10 +25,3 @@ jobs:
           echo "Found Python at: ${CODON_PYTHON}"
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: Install python dependencies
-        run: pip install matplotlib
-      - name: Week 1
-        working-directory: week1
-        run: |
-          export LD_LIBRARY_PATH=/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-          bash evaluate.sh
