@@ -19,7 +19,7 @@ print_single_row () {
     if [[ $2 == "python" ]]; then
         code_output=$( /usr/bin/time -f "%E" -o time_output.txt python3 $python_path/main.py $data_path/data$1 2>&4 )
     elif [[ $2 == "codon" ]]; then
-	code_output=$( /usr/bin/time -f "%E" -o time_output.txt codon run -release $codon_path/main.py $data_path/data$1 2>&4 )
+	code_output=$( /usr/bin/time -f "%E" -o time_output.txt ~/.codon/bin/codon run -release $codon_path/main.py $data_path/data$1 2>&4 )
     fi
     running_time=$(<time_output.txt)
     str="$str$running_time"'\t\t'
