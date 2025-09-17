@@ -2,6 +2,7 @@
 set -euxo pipefail
 shopt -s extglob
 exec 3>&1 4>&2 # link file descriptors 3 and 4 to original stdout and stderr
+ulimit -s 8192000
 
 readonly line_pattern='^[0-9]+ [0-9]+$'
 readonly codon_path="code/codon"
