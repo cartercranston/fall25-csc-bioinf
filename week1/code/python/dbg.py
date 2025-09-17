@@ -1,5 +1,4 @@
 import copy
-from matplotlib import pyplot as plt
 
 
 def reverse_complement(key):
@@ -70,8 +69,6 @@ class DBG:
         for idx in self.nodes:
             count[self.nodes[idx].get_count()] += 1
         print(count[0:10])
-        # plt.plot(count)
-        # plt.show()
 
     def _add_node(self, kmer):
         if kmer not in self.kmer2idx:
