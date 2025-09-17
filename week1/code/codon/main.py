@@ -8,7 +8,7 @@ p_sys.setrecursionlimit(1000000)
 
 
 if __name__ == "__main__":
-    """argv = sys.argv
+    argv = sys.argv
     # short1, short2 and long1 are List[int]
     short1, short2, long1 = read_data(os.path.join('./', argv[1]))
 
@@ -23,5 +23,3 @@ if __name__ == "__main__":
             print(i, len(c))
             f.write(f'>contig_{i}\n')
             f.write(c + '\n')
-    """
-    print(sys.argv)
